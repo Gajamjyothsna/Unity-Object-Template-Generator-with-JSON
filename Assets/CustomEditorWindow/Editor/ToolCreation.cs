@@ -20,11 +20,15 @@ public class ToolCreation : EditorWindow
         LoadUIObjects();
         GetWindow(typeof(ToolCreation));
     }
+    #region Private Variables
     private static string jsonFilePath = "Assets/Resources/UICustomdata.json"; // Adjust the path as needed
    
 
     private static List<UICustomObjectData> uiCustomObjectList = new List<UICustomObjectData>();
 
+    private GameObject _setParentObject;
+
+    #endregion
 
     #region Private Methods
     private void OnEnable()
@@ -60,12 +64,12 @@ public class ToolCreation : EditorWindow
             LoadUIObjects(); //Calling method to Save Data in JSON
         }
     }
-    
+
+    private GameObject uiElement;
     private void CreateUIElement(string _parentName)
     {
-        CheckForParentObject(_parentName);
         // Create a new UI GameObject
-        GameObject uiElement = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+       uiElement = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
 
         // Set position and size
         RectTransform rectTransform = uiElement.GetComponent<RectTransform>();
@@ -88,9 +92,9 @@ public class ToolCreation : EditorWindow
 
         uiElement.transform.SetParent(canvas.transform, false);
 
-        // Check if the specified parent object exists
-       
+        CheckForParentObject(_parentName);
 
+        // Check if the specified parent object exists
         AddUICustomDataToList(objectName, position, scale, rotation, color, parentObjectName);
     }
     private void AddUICustomDataToList(string _objectName, Vector3 _position, Vector3 _scale, Vector3 _rotation, Color _color, string parentObjectName)
@@ -99,27 +103,35 @@ public class ToolCreation : EditorWindow
        
         uiCustomObjectList.Add(_data);
     }
-
     private void CheckForParentObject(string _parentName)
     {
-        if (uiCustomObjectList.Count == 0)
+        if (string.IsNullOrEmpty(_parentName))
         {
-            return; 
+            return;
         }
         else
         {
-            string parentName = uiCustomObjectList.Find(x => x.objectName == _parentName).objectName;
-            if (parentName == null)
+            UICustomObjectData parentData = uiCustomObjectList.Find(data => data.objectName == _parentName);
+
+            if (parentData != null)
             {
-                return;
+                Debug.Log("Parent is found");
+                _setParentObject = GameObject.Find(_parentName);
+
+                if (_setParentObject != null)
+                {
+                    Debug.Log("Parent Object: " + _setParentObject.name);
+                    uiElement.transform.SetParent(_setParentObject.transform, true);
+                }
+                else
+                {
+                    Debug.LogError("Parent GameObject not found.");
+                }
             }
             else
             {
-                Debug.Log("Parent is found");
-                GameObject parentObject = new GameObject(parentName);
-                Debug.Log(parentObject.name);
+                Debug.LogWarning("Parent Object not found in the uiCustomObjectList.");
             }
-            
         }
     }
     #endregion
