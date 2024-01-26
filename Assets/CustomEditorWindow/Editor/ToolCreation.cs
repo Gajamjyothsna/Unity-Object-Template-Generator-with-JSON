@@ -12,19 +12,28 @@ public class ToolCreation : EditorWindow
     private Vector3 scale = Vector3.one;
     private Vector3 rotation = Vector3.zero;
     private Color color = Color.white;
+    private string parentObjectName = string.Empty;
 
     [MenuItem("Tools/Object Generation Tool")]
     public static void ShowWindow()
     {
+        LoadUIObjects();
         GetWindow(typeof(ToolCreation));
     }
-    private string jsonFilePath = "Assets/Resources/UICustomdata.json"; // Adjust the path as needed
+    private static string jsonFilePath = "Assets/Resources/UICustomdata.json"; // Adjust the path as needed
+   
 
-    private List<UICustomObjectData> uiCustomObjectList = new List<UICustomObjectData>();
+    private static List<UICustomObjectData> uiCustomObjectList = new List<UICustomObjectData>();
 
+
+    #region Private Methods
     private void OnEnable()
     {
-       LoadUIObjects();
+        //jsonFilePath = "Assets/Resources/UICustomdata_" + System.DateTime.Now.ToString("yyyyMMddHHmmss") + ".json";
+        if (uiCustomObjectList.Count == 0)
+        {
+            LoadUIObjects();
+        }
     }
     private void OnGUI()
     {
@@ -35,10 +44,11 @@ public class ToolCreation : EditorWindow
         scale = EditorGUILayout.Vector3Field("Size:", scale);
         rotation = EditorGUILayout.Vector3Field("Rotation:", rotation);
         color = EditorGUILayout.ColorField("Color:", color);
+        parentObjectName = EditorGUILayout.TextField("Parent", parentObjectName);
 
         if (GUILayout.Button("Create UI Element"))
         {
-            CreateUIElement(); // Calling a method to instantiate the UI element
+            CreateUIElement(parentObjectName); // Calling a method to instantiate the UI element
         }
         if (GUILayout.Button("Save to JSON"))
         {
@@ -50,8 +60,10 @@ public class ToolCreation : EditorWindow
             LoadUIObjects(); //Calling method to Save Data in JSON
         }
     }
-    private void CreateUIElement()
+    
+    private void CreateUIElement(string _parentName)
     {
+        CheckForParentObject(_parentName);
         // Create a new UI GameObject
         GameObject uiElement = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
 
@@ -76,53 +88,54 @@ public class ToolCreation : EditorWindow
 
         uiElement.transform.SetParent(canvas.transform, false);
 
-        AddUICustomDataToList(objectName, position, scale, rotation, color);
+        // Check if the specified parent object exists
+       
+
+        AddUICustomDataToList(objectName, position, scale, rotation, color, parentObjectName);
     }
-    private void AddUICustomDataToList(string _objectName, Vector3 _position, Vector3 _scale, Vector3 _rotation, Color _color)
+    private void AddUICustomDataToList(string _objectName, Vector3 _position, Vector3 _scale, Vector3 _rotation, Color _color, string parentObjectName)
     {
-        UICustomObjectData _data = new UICustomObjectData(_objectName, _position, _scale, _rotation, _color);
+        UICustomObjectData _data = new UICustomObjectData(_objectName, _position,_scale, _rotation, _color, parentObjectName);
        
         uiCustomObjectList.Add(_data);
     }
+
+    private void CheckForParentObject(string _parentName)
+    {
+        if (uiCustomObjectList.Count == 0)
+        {
+            return; 
+        }
+        else
+        {
+            string parentName = uiCustomObjectList.Find(x => x.objectName == _parentName).objectName;
+            if (parentName == null)
+            {
+                return;
+            }
+            else
+            {
+                Debug.Log("Parent is found");
+                GameObject parentObject = new GameObject(parentName);
+                Debug.Log(parentObject.name);
+            }
+            
+        }
+    }
+    #endregion
+
+
+    #region JSON Serialization and Deserialization
 
     private void SaveUIObjects()
     {
         string json = JsonUtility.ToJson(new UICustomObjectListWrapper(uiCustomObjectList), true);
         System.IO.File.WriteAllText(jsonFilePath, json);
         Debug.Log("Data saved to JSON.");
-        //string json = JsonUtility.ToJson(uiCustomObjectList, true);
-        //System.IO.File.WriteAllText(jsonFilePath, json);
-        //Debug.Log("Data saved to JSON.");
+        
     }
-    private void LoadUIObjects()
+    private static void LoadUIObjects()
     {
-        //if (System.IO.File.Exists(jsonFilePath))
-        //{
-        //    string json = System.IO.File.ReadAllText(jsonFilePath);
-        //    uiCustomObjectList = JsonUtility.FromJson<List<UICustomObjectData>>(json);
-
-        //    if (uiCustomObjectList.Count > 0)
-        //    {
-        //        UICustomObjectData data = uiCustomObjectList[0];
-
-        //        objectName = data.objectName;
-        //        position = data.position;
-        //        rotation = data.rotation;
-        //        scale = data.scale;
-        //        color = data.color;
-
-        //        Debug.Log("Data loaded from JSON.");
-        //    }
-        //    else
-        //    {
-        //        Debug.LogError("No UI objects found in JSON.");
-        //    }
-        //}
-        //else
-        //{
-        //    Debug.LogError("JSON file not found.");
-        //}
-
         if (System.IO.File.Exists(jsonFilePath))
         {
             string json = System.IO.File.ReadAllText(jsonFilePath);
@@ -139,6 +152,9 @@ public class ToolCreation : EditorWindow
 
 
     }
+    #endregion
+
+    #region Wrapper Class
 
     [System.Serializable]
     private class UICustomObjectListWrapper
@@ -150,6 +166,9 @@ public class ToolCreation : EditorWindow
             uiCustomObjectList = list;
         }
     }
+    #endregion
+
+    #region Data classs
 
     [System.Serializable]
     private class UICustomObjectData
@@ -159,14 +178,17 @@ public class ToolCreation : EditorWindow
         public Vector3 rotation;
         public Vector3 scale;
         public Color color;
+        public string parentObjectName;
 
-        public UICustomObjectData(string _name, Vector3 _position, Vector3 _rotation, Vector3 _scale, Color _color)
+        public UICustomObjectData(string _name, Vector3 _position, Vector3 _rotation, Vector3 _scale, Color _color, string _parentObjectName)
         {
             objectName = _name;
             position = _position;
             rotation = _rotation;
             scale = _scale;
             color = _color;
+            parentObjectName = _parentObjectName;
         }
     }
+    #endregion
 }
