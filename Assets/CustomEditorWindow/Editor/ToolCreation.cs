@@ -153,16 +153,18 @@ public class ToolCreation : EditorWindow
         if (createTextElement)
         {
             AddTextComponentToUIElement(uiElement);
+            // Check if the specified parent object exists
+            AddUICustomDataToList(objectName, position, scale, rotation, color, parentObjectName, userInputText);
         }
         else if (createImageElement)
         {
             Debug.Log("color " + color);
             AddImageComponentToUIElement(uiElement);
+            // Check if the specified parent object exists
+            AddUICustomDataToList(objectName, position, scale, rotation, color, parentObjectName, "");
         }
 
-
-        // Check if the specified parent object exists
-        AddUICustomDataToList(objectName, position, scale, rotation, color, parentObjectName);
+       
     }
     private void AddTextComponentToUIElement(GameObject element)
     {
@@ -202,9 +204,9 @@ public class ToolCreation : EditorWindow
             imageComponent.color = color;
         }
     }
-    private void AddUICustomDataToList(string _objectName, Vector3 _position, Vector3 _scale, Vector3 _rotation, Color _color, string parentObjectName)
+    private void AddUICustomDataToList(string _objectName, Vector3 _position, Vector3 _scale, Vector3 _rotation, Color _color, string parentObjectName, string textData)
     {
-        UICustomObjectData _data = new UICustomObjectData(_objectName, _position,_scale, _rotation, _color, parentObjectName);
+        UICustomObjectData _data = new UICustomObjectData(_objectName, _position,_scale, _rotation, _color, parentObjectName, textData);
        
         uiCustomObjectList.Add(_data);
     }
@@ -331,8 +333,9 @@ public class ToolCreation : EditorWindow
         public Vector3 scale;
         public Color color;
         public string parentObjectName;
+        public string textData;
 
-        public UICustomObjectData(string _name, Vector3 _position, Vector3 _rotation, Vector3 _scale, Color _color, string _parentObjectName)
+        public UICustomObjectData(string _name, Vector3 _position, Vector3 _rotation, Vector3 _scale, Color _color, string _parentObjectName, string _textData)
         {
             objectName = _name;
             position = _position;
@@ -340,6 +343,7 @@ public class ToolCreation : EditorWindow
             scale = _scale;
             color = _color;
             parentObjectName = _parentObjectName;
+            textData = _textData;
         }
     }
     #endregion
