@@ -103,14 +103,26 @@ public class ToolCreation : EditorWindow
         {
             LoadUIObjects(); //Calling method to Save Data in JSON
         }
-        if(GUILayout.Button("Edit Particular UI Object")) // Button to edit particular UI object
+
+        GUILayout.Label("Edit UI Object", EditorStyles.boldLabel);
+
+        if (GUILayout.Button("Edit")) // Button to edit particular UI object
         {
-            showTextField = !showTextField; //Based on Variable
+            showTextField = !showTextField; // Toggle the text field based on the button click
         }
+
         if (showTextField)
         {
             textFieldContent = EditorGUILayout.TextField("Text Field:", textFieldContent);
-            UpdateUIData(textFieldContent);
+
+            GUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("Update UI Data"))
+            {
+                UpdateUIDataFromTextField(textFieldContent);
+            }
+
+            GUILayout.EndHorizontal();
         }
     }
 
@@ -154,17 +166,66 @@ public class ToolCreation : EditorWindow
         {
             AddTextComponentToUIElement(uiElement);
             // Check if the specified parent object exists
-            AddUICustomDataToList(objectName, position, scale, rotation, color, parentObjectName, userInputText);
+            AddUICustomDataToList(objectName, position, scale, rotation, color, parentObjectName, userInputText, UIType.Text);
         }
         else if (createImageElement)
         {
             Debug.Log("color " + color);
             AddImageComponentToUIElement(uiElement);
             // Check if the specified parent object exists
-            AddUICustomDataToList(objectName, position, scale, rotation, color, parentObjectName, "");
+            AddUICustomDataToList(objectName, position, scale, rotation, color, parentObjectName, "", UIType.Image);
         }
 
        
+    }
+    private UICustomObjectData updateData;
+    private void UpdateUIDataFromTextField(string _uiObjectName)
+    {
+        updateData = uiCustomObjectList.Find(data => data.objectName == _uiObjectName);
+
+        GameObject uiGameObject = GameObject.Find(textFieldContent);
+
+        if (updateData != null)
+        {
+            Debug.Log("Name" + _uiObjectName);
+            // You may add UI elements for updating other properties like position, scale, color, etc.
+            RectTransform objectRectTransform = uiGameObject.GetComponent<RectTransform>();
+
+            updateData.objectName = textFieldContent;
+            updateData.scale = uiElement.transform.localScale;
+           // updateData.rotation = Quaternion.EulerAngles(objectRectTransform.localRotation);
+            updateData.position = objectRectTransform.anchoredPosition;
+            updateData.scale = objectRectTransform.sizeDelta;
+            updateData.textData = uiGameObject.GetComponent<Text>().text;
+            UpdateData(updateData);
+        }
+        else
+        {
+            Debug.LogWarning("UI Object not found for update: " + _uiObjectName);
+        }
+    }
+    private void UpdateData(UICustomObjectData updatedData)
+    {
+        if (uiCustomObjectList != null && uiCustomObjectList.Count > 0)
+        {
+            int index = uiCustomObjectList.FindIndex(data => data.objectName == updatedData.objectName);
+
+            if (index != -1)
+            {
+                uiCustomObjectList[index] = updatedData;
+                Debug.Log(index + ": " + updatedData.objectName);
+                SaveUIObjects(); // Save the updated data to the JSON file
+                showTextField = false; // Reset the text field after updating
+            }
+            else
+            {
+                Debug.LogError("Object not found in the list.");
+            }
+        }
+        else
+        {
+            Debug.LogError("uiCustomObjectList is null or empty.");
+        }
     }
     private void AddTextComponentToUIElement(GameObject element)
     {
@@ -204,9 +265,9 @@ public class ToolCreation : EditorWindow
             imageComponent.color = color;
         }
     }
-    private void AddUICustomDataToList(string _objectName, Vector3 _position, Vector3 _scale, Vector3 _rotation, Color _color, string parentObjectName, string textData)
+    private void AddUICustomDataToList(string _objectName, Vector3 _position, Vector3 _scale, Vector3 _rotation, Color _color, string parentObjectName, string textData, UIType uiType)
     {
-        UICustomObjectData _data = new UICustomObjectData(_objectName, _position,_scale, _rotation, _color, parentObjectName, textData);
+        UICustomObjectData _data = new UICustomObjectData(_objectName, _position,  _scale, _rotation, _color, parentObjectName, textData, uiType);
        
         uiCustomObjectList.Add(_data);
     }
@@ -249,21 +310,25 @@ public class ToolCreation : EditorWindow
         {
             showTextField = true;
             textFieldContent = _uiObjectName;
+           // UpdateExistedData(_uiObjectName);
         }
         else
         {
             Debug.LogWarning("UI Object not found for update: " + _uiObjectName);
         }
     }
-    private void UpdateData(UICustomObjectData updatedData)
+    private void UpdateExistedData(string _uiObjectName)
     {
         if (uiCustomObjectList != null && uiCustomObjectList.Count > 0)
         {
-            int index = uiCustomObjectList.FindIndex(data => data.objectName == updatedData.objectName);
+            UICustomObjectData updateData = uiCustomObjectList.Find(data => data.objectName == _uiObjectName);
+
+            int index = uiCustomObjectList.FindIndex(data => data.objectName == updateData.objectName);
 
             if (index != -1)
             {
-                uiCustomObjectList[index] = updatedData;
+                uiCustomObjectList[index] = updateData;
+                Debug.Log("Data" + uiCustomObjectList[index].objectName);
                 SaveUIObjects(); // Save the updated data to the JSON file
                 showTextField = false; // Reset the text field after updating
             }
@@ -334,8 +399,9 @@ public class ToolCreation : EditorWindow
         public Color color;
         public string parentObjectName;
         public string textData;
+        public string uiType;
 
-        public UICustomObjectData(string _name, Vector3 _position, Vector3 _rotation, Vector3 _scale, Color _color, string _parentObjectName, string _textData)
+        public UICustomObjectData(string _name, Vector3 _position, Vector3 _scale, Vector3 _rotation, Color _color, string _parentObjectName, string _textData, UIType _uiType)
         {
             objectName = _name;
             position = _position;
@@ -344,7 +410,14 @@ public class ToolCreation : EditorWindow
             color = _color;
             parentObjectName = _parentObjectName;
             textData = _textData;
+            uiType = _uiType.ToString();
         }
+    }
+    [System.Serializable]
+    public enum UIType
+    {
+        Text,
+        Image
     }
     #endregion
 }
