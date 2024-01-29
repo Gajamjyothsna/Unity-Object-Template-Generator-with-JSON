@@ -1,0 +1,463 @@
+{
+    "uiCustomObjectList": [
+        {
+            "objectName": "GamePlayBG",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "parentObjectName": "",
+            "textData": "",
+            "uiType": "Image"
+        },
+        {
+            "objectName": "GamePlayBG",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 100.0,
+                "y": 100.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "parentObjectName": "",
+            "textData": "",
+            "uiType": "Image"
+        },
+        {
+            "objectName": "GamePlayBG",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 100.0,
+                "y": 100.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "parentObjectName": "",
+            "textData": "",
+            "uiType": "Image"
+        },
+        {
+            "objectName": "GamePlayBG",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "parentObjectName": "",
+            "textData": "",
+            "uiType": "Image"
+        },
+        {
+            "objectName": "TitleArea",
+            "position": {
+                "x": 0.0,
+                "y": -50.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 100.0,
+                "y": 50.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 0.0
+            },
+            "parentObjectName": "",
+            "textData": "",
+            "uiType": "Image"
+        },
+        {
+            "objectName": "TitleText",
+            "position": {
+                "x": 0.0,
+                "y": -50.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 0.026415109634399415,
+                "g": 0.024670714512467386,
+                "b": 0.024670714512467386,
+                "a": 1.0
+            },
+            "parentObjectName": "TitleArea",
+            "textData": "DemoGame",
+            "uiType": "Text"
+        },
+        {
+            "objectName": "TitleText",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 0.026415109634399415,
+                "g": 0.024670714512467386,
+                "b": 0.024670714512467386,
+                "a": 1.0
+            },
+            "parentObjectName": "TitleArea",
+            "textData": "DemoGame",
+            "uiType": "Text"
+        },
+        {
+            "objectName": "TitleText",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 0.026415109634399415,
+                "g": 0.024670714512467386,
+                "b": 0.024670714512467386,
+                "a": 1.0
+            },
+            "parentObjectName": "TitleArea",
+            "textData": "DemoGame",
+            "uiType": "Text"
+        },
+        {
+            "objectName": "TitleText",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 0.026415109634399415,
+                "g": 0.024670714512467386,
+                "b": 0.024670714512467386,
+                "a": 1.0
+            },
+            "parentObjectName": "TitleArea",
+            "textData": "DemoGame",
+            "uiType": "Text"
+        },
+        {
+            "objectName": "TitleText",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 100.0,
+                "y": 50.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 0.026415109634399415,
+                "g": 0.024670714512467386,
+                "b": 0.024670714512467386,
+                "a": 1.0
+            },
+            "parentObjectName": "TitleArea",
+            "textData": "DemoGame",
+            "uiType": "Text"
+        },
+        {
+            "objectName": "TitleText",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 100.0,
+                "y": 50.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 0.026415109634399415,
+                "g": 0.024670714512467386,
+                "b": 0.024670714512467386,
+                "a": 1.0
+            },
+            "parentObjectName": "TitleArea",
+            "textData": "DemoGame",
+            "uiType": "Text"
+        },
+        {
+            "objectName": "TitleText",
+            "position": {
+                "x": 0.0,
+                "y": -50.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 100.0,
+                "y": 50.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 0.026415109634399415,
+                "g": 0.024670714512467386,
+                "b": 0.024670714512467386,
+                "a": 1.0
+            },
+            "parentObjectName": "TitleArea",
+            "textData": "DemoGame",
+            "uiType": "Text"
+        },
+        {
+            "objectName": "GamePlayBG",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 0.026415109634399415,
+                "g": 0.024670714512467386,
+                "b": 0.024670714512467386,
+                "a": 1.0
+            },
+            "parentObjectName": "",
+            "textData": "",
+            "uiType": "Image"
+        },
+        {
+            "objectName": "GameTitleArea",
+            "position": {
+                "x": 0.0,
+                "y": -100.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 100.0,
+                "y": 50.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 0.026415109634399415,
+                "g": 0.024670714512467386,
+                "b": 0.024670714512467386,
+                "a": 0.0
+            },
+            "parentObjectName": "",
+            "textData": "",
+            "uiType": "Image"
+        },
+        {
+            "objectName": "GameTitleArea",
+            "position": {
+                "x": 0.0,
+                "y": -100.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 100.0,
+                "y": 50.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 0.026415109634399415,
+                "g": 0.024670714512467386,
+                "b": 0.024670714512467386,
+                "a": 0.0
+            },
+            "parentObjectName": "",
+            "textData": "",
+            "uiType": "Image"
+        },
+        {
+            "objectName": "TitleBG",
+            "position": {
+                "x": 0.0,
+                "y": -100.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 100.0,
+                "y": 50.0,
+                "z": 1.0
+            },
+            "color": {
+                "r": 0.9245283007621765,
+                "g": 0.25642576813697817,
+                "b": 0.25642576813697817,
+                "a": 1.0
+            },
+            "parentObjectName": "GameTitleArea",
+            "textData": "",
+            "uiType": "Image"
+        },
+        {
+            "objectName": "TitleText_Dyn",
+            "position": {
+                "x": 0.0,
+                "y": -25.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 100.0,
+                "y": 50.0,
+                "z": 0.0
+            },
+            "color": {
+                "r": 0.0339621901512146,
+                "g": 0.03376995027065277,
+                "b": 0.03376995027065277,
+                "a": 1.0
+            },
+            "parentObjectName": "TitleBG",
+            "textData": "SNAKE GAME",
+            "uiType": "Text"
+        }
+    ]
+}

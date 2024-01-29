@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 
-
 public class ToolCreation : EditorWindow
 {
     // Variables to store UI data
@@ -14,12 +13,10 @@ public class ToolCreation : EditorWindow
     private Vector3 rotation = Vector3.zero;
     private Color color = Color.white;
     private string parentObjectName = string.Empty;
+    private Vector2 anchorMin = Vector2.zero;
+    private Vector2 anchorMax = Vector2.zero;
 
-
-    private bool createTextElement = false;
-    private bool createImageElement = false;
-
-
+    //Menu item to open the Window
     [MenuItem("Tools/Object Generation Tool")]
     public static void ShowWindow()
     {
@@ -29,52 +26,48 @@ public class ToolCreation : EditorWindow
     #region Private Variables
     private static string jsonFilePath = "Assets/Resources/UICustomdata.json"; // Adjust the path as needed
    
-
     private static List<UICustomObjectData> uiCustomObjectList = new List<UICustomObjectData>();
-
     private GameObject _setParentObject;
 
     private bool showTextField = false;
     private string textFieldContent = "";
     private string userInputText = "DefaultText";
     private GUIStyle centeredLabelStyle;
+
+    private bool createTextElement = false;
+    private bool createImageElement = false;
+
+    private GameObject uiElement;
+    private UICustomObjectData updateData;
+
     #endregion
 
     #region Private Methods
     private void OnEnable()
     {
-        //jsonFilePath = "Assets/Resources/UICustomdata_" + System.DateTime.Now.ToString("yyyyMMddHHmmss") + ".json";
-        if (uiCustomObjectList.Count == 0)
+        if (uiCustomObjectList.Count == 0) //Loading UI objects when the window is enabled
         {
             LoadUIObjects();
         }
     }
     private void OnGUI()
     {
-        // Initialize GUIStyle for centered label if not already initialized
-        if (centeredLabelStyle == null)
-        {
-            centeredLabelStyle = new GUIStyle(EditorStyles.boldLabel);
-            centeredLabelStyle.alignment = TextAnchor.MiddleCenter;
-            centeredLabelStyle.fixedHeight = 50; // Set the height as needed
-        }
-
-        GUILayout.Label("Create UI Object", EditorStyles.boldLabel);
+        GUILayout.Label("Create UI Object", EditorStyles.boldLabel); //Creating Text
 
         if (createTextElement)
         {
-            userInputText = EditorGUILayout.TextField("User Input Text:", userInputText);
+            userInputText = EditorGUILayout.TextField("User Input Text:", userInputText); //If it is Text Button toggled, then enabling the text field
         }
 
         GUILayout.BeginHorizontal();
 
-        if (GUILayout.Button("Create Text Element"))
+        if (GUILayout.Button("Create Text Element")) //Text Button
         {
             createTextElement = true;
             createImageElement = false;
         }
 
-        if (GUILayout.Button("Create Image Element"))
+        if (GUILayout.Button("Create Image Element")) //Image Button
         {
             createTextElement = false;
             createImageElement = true;
@@ -82,13 +75,17 @@ public class ToolCreation : EditorWindow
 
         GUILayout.EndHorizontal();
 
-
+        //Storing the Variables from the User
         objectName = EditorGUILayout.TextField("Element Name:", objectName);
         position = EditorGUILayout.Vector3Field("Position:", position);
         scale = EditorGUILayout.Vector3Field("Size:", scale);
         rotation = EditorGUILayout.Vector3Field("Rotation:", rotation);
         color = EditorGUILayout.ColorField("Color:", color);
         parentObjectName = EditorGUILayout.TextField("Parent", parentObjectName);
+
+        anchorMax = EditorGUILayout.Vector2Field("AnchorMax:", anchorMax); //storing anchor positions
+        anchorMin = EditorGUILayout.Vector2Field("AnchorMin:", anchorMin);
+
 
         if (GUILayout.Button("Create UI Element"))
         {
@@ -119,25 +116,23 @@ public class ToolCreation : EditorWindow
 
             if (GUILayout.Button("Update UI Data"))
             {
-                UpdateUIDataFromTextField(textFieldContent);
+                UpdateUIDataFromTextField(textFieldContent); //Opening text field for Edit
             }
 
             GUILayout.EndHorizontal();
         }
     }
 
-    private GameObject uiElement;
     private void CreateUIElement(string _parentName)
     {
-       // uiElement = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer));
         if (createTextElement)
         {
-            // Create a new UI GameObject
+            // Create a new UI Text GameObject
             uiElement = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
         }
         else if(createImageElement)
         {
-            // Create a new UI GameObject
+            // Create a new UI Image GameObject
             uiElement = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
         }
       
@@ -146,6 +141,9 @@ public class ToolCreation : EditorWindow
         rectTransform.anchoredPosition = position;
         rectTransform.sizeDelta = scale;
         rectTransform.localRotation = Quaternion.EulerAngles(rotation);
+
+        rectTransform.anchorMin = anchorMin; // Set the anchor positions
+        rectTransform.anchorMax = anchorMax;
 
         // Parent the UI element to the Canvas
         Canvas canvas = FindObjectOfType<Canvas>();
@@ -158,42 +156,35 @@ public class ToolCreation : EditorWindow
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         }
 
-        uiElement.transform.SetParent(canvas.transform, false);
+        uiElement.transform.SetParent(canvas.transform, false); //Making canvas as the parent
 
-        CheckForParentObject(_parentName);
+        CheckForParentObject(_parentName); //checking for the parent Object
 
         if (createTextElement)
         {
-            AddTextComponentToUIElement(uiElement);
-            // Check if the specified parent object exists
-            AddUICustomDataToList(objectName, position, scale, rotation, color, parentObjectName, userInputText, UIType.Text);
+            AddTextComponentToUIElement(uiElement); 
+            AddUICustomDataToList(objectName, position, scale, rotation, color, parentObjectName, userInputText, UIType.Text); //Adding data to the list
         }
         else if (createImageElement)
         {
-            Debug.Log("color " + color);
             AddImageComponentToUIElement(uiElement);
-            // Check if the specified parent object exists
-            AddUICustomDataToList(objectName, position, scale, rotation, color, parentObjectName, "", UIType.Image);
+            AddUICustomDataToList(objectName, position, scale, rotation, color, parentObjectName, "", UIType.Image); //Adding data into the list
         }
-
-       
     }
-    private UICustomObjectData updateData;
     private void UpdateUIDataFromTextField(string _uiObjectName)
     {
         updateData = uiCustomObjectList.Find(data => data.objectName == _uiObjectName);
 
-        GameObject uiGameObject = GameObject.Find(textFieldContent);
+        GameObject uiGameObject = GameObject.Find(textFieldContent); //Finding the gameObject based on the input textfieldContent
 
         if (updateData != null)
         {
             Debug.Log("Name" + _uiObjectName);
-            // You may add UI elements for updating other properties like position, scale, color, etc.
-            RectTransform objectRectTransform = uiGameObject.GetComponent<RectTransform>();
 
+            // updating other properties like position, scale, color, etc.
+            RectTransform objectRectTransform = uiGameObject.GetComponent<RectTransform>();
             updateData.objectName = textFieldContent;
             updateData.scale = uiElement.transform.localScale;
-           // updateData.rotation = Quaternion.EulerAngles(objectRectTransform.localRotation);
             updateData.position = objectRectTransform.anchoredPosition;
             updateData.scale = objectRectTransform.sizeDelta;
             updateData.textData = uiGameObject.GetComponent<Text>().text;
@@ -208,23 +199,23 @@ public class ToolCreation : EditorWindow
     {
         if (uiCustomObjectList != null && uiCustomObjectList.Count > 0)
         {
-            int index = uiCustomObjectList.FindIndex(data => data.objectName == updatedData.objectName);
+            int index = uiCustomObjectList.FindIndex(data => data.objectName == updatedData.objectName); //checking the list with object name and getting index
 
             if (index != -1)
             {
-                uiCustomObjectList[index] = updatedData;
+                uiCustomObjectList[index] = updatedData; //with the index, updating the properties values from updatedData
                 Debug.Log(index + ": " + updatedData.objectName);
                 SaveUIObjects(); // Save the updated data to the JSON file
                 showTextField = false; // Reset the text field after updating
             }
             else
             {
-                Debug.LogError("Object not found in the list.");
+                Debug.Log("Object not found in the list.");
             }
         }
         else
         {
-            Debug.LogError("uiCustomObjectList is null or empty.");
+            Debug.Log("uiCustomObjectList is null or empty.");
         }
     }
     private void AddTextComponentToUIElement(GameObject element)
@@ -237,7 +228,7 @@ public class ToolCreation : EditorWindow
             textComponent = element.AddComponent<Text>();
         }
 
-        // Now safely assign the color
+        // Assigning the properties 
         if (textComponent != null)
         {
             textComponent.text = userInputText;
@@ -259,7 +250,7 @@ public class ToolCreation : EditorWindow
             imageComponent = element.AddComponent<Image>();
         }
 
-        // Now safely assign the color
+        // Assigning the properties
         if (imageComponent != null)
         {
             imageComponent.color = color;
@@ -273,13 +264,13 @@ public class ToolCreation : EditorWindow
     }
     private void CheckForParentObject(string _parentName)
     {
-        if (string.IsNullOrEmpty(_parentName))
+        if (string.IsNullOrEmpty(_parentName)) //If parent is null
         {
             return;
         }
         else
         {
-            UICustomObjectData parentData = uiCustomObjectList.Find(data => data.objectName == _parentName);
+            UICustomObjectData parentData = uiCustomObjectList.Find(data => data.objectName == _parentName); //parent is not null, checking the list for parent
 
             if (parentData != null)
             {
@@ -374,8 +365,9 @@ public class ToolCreation : EditorWindow
     #endregion
 
     #region Wrapper Class
-
     [System.Serializable]
+
+    // To allow proper serialization and deserialization of the list of UICustomObjectData objects using Unity's JsonUtility.
     private class UICustomObjectListWrapper
     {
         public List<UICustomObjectData> uiCustomObjectList;
